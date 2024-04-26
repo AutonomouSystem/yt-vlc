@@ -1,8 +1,8 @@
-import subprocess
 import yt_dlp
 import os
 import time
 import sys
+import subprocess
 
 def get_video_links(url):
     ydl_opts = {
@@ -20,7 +20,7 @@ def get_video_links(url):
 
 def download_video(url, output_dir):
     ydl_opts = {
-        'format': 'best',
+        'format': 'bestvideo[height<=1080]+bestaudio/best',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -35,16 +35,25 @@ def watch(url):
     os.makedirs(output_dir, exist_ok=True)
     
     video_links = get_video_links(url)
+    video_queue = []
+    
     for video_link in video_links:
         download_video(video_link, output_dir)
         video_files = os.listdir(output_dir)
         video_path = os.path.join(output_dir, video_files[0])
+        video_queue.append(video_path)
+    
+    for video_path in video_queue:
         vlc_play(video_path)
-        time.sleep(1)  # Wait for a short duration before removing the file
-        cleanup(video_path)
+        time.sleep(1)  # Wait for a short duration before playing the next video
+    
+    cleanup(output_dir)
 
-def cleanup(video_path):
-    os.remove(video_path)
+def cleanup(output_dir):
+    for file in os.listdir(output_dir):
+        file_path = os.path.join(output_dir, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
