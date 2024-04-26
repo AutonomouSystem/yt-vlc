@@ -1,15 +1,8 @@
+import subprocess
 import yt_dlp
 import os
 import time
 import sys
-
-""" Download Video(s) from Youtube and Play them in VLC
-
-Usage:
-python watch.py <url>
-
-url: Youtube playlist url
-"""
 
 def get_video_links(url):
     ydl_opts = {
@@ -22,7 +15,7 @@ def get_video_links(url):
             video_links = [entry['url'] for entry in info['entries']]
         else:
             # URL is a single video
-            video_links = [info['url']]
+            video_links = [info['webpage_url']]
     return video_links
 
 def download_video(url, output_dir):
@@ -34,13 +27,14 @@ def download_video(url, output_dir):
         ydl.download([url])
 
 def vlc_play(video_path):
-    os.system(f'vlc "{video_path}"')
+    vlc_path = r"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe"
+    subprocess.run([vlc_path, video_path])
 
-def watch(playlist_url):
+def watch(url):
     output_dir = os.path.join(os.getcwd(), 'youtube')
     os.makedirs(output_dir, exist_ok=True)
     
-    video_links = get_video_links(playlist_url)
+    video_links = get_video_links(url)
     for video_link in video_links:
         download_video(video_link, output_dir)
         video_files = os.listdir(output_dir)
@@ -54,8 +48,8 @@ def cleanup(video_path):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        playlist_url = sys.argv[1]
+        url = sys.argv[1]
     else:
-        playlist_url = input("Enter the YouTube playlist URL: ")
-        
-    watch(playlist_url) 
+        url = input("Enter the YouTube video or playlist URL: ")
+    
+    watch(url)
