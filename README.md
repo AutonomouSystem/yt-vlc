@@ -1,5 +1,7 @@
 # yt-vlc
 
+Stream YouTube urls directly to VLC or download and play the videos locally, will remove downloads after VLC exits.
+
 example usage:
 ```
 python watch.py https://youtube.com/<link>
