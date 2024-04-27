@@ -28,8 +28,6 @@ This command will download all the videos in the specified YouTube playlist to f
 
 3. Install VLC media player from the official website: https://www.videolan.org/vlc/
 
-3. Install VLC media player from the official website: https://www.videolan.org/vlc
-
 ## Notes
 
 - By default, the script streams the YouTube video or playlist directly with VLC. To download the videos instead, use the `-d` or `--download` option.
