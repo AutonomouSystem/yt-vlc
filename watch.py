@@ -45,7 +45,7 @@ def watch(url):
     
     for video_path in video_queue:
         vlc_play(video_path)
-        time.sleep(1)  # Wait for a short duration before playing the next video
+        time.sleep(1)  
     
     cleanup(output_dir)
 
